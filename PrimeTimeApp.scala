@@ -1,6 +1,7 @@
 import scala.io.StdIn.readLine
 import scala.util.Random
 import MathExtensions._
+import scala.util.control._
 
 object PrimeTimeApp extends App {
   
@@ -14,38 +15,49 @@ object PrimeTimeApp extends App {
   
   var primeList = MinAnswer primeListTo MaxAnswer
 
+  var loop = new Breaks
+
   // Loop
   
-  do {
+  loop.breakable{
 
-    // Generate a random number from 200 to 500
+    do {
 
-    var answer = 0
+      // Generate a random number from 200 to 500
 
-    while (answer % 2 == 0 || answer % 5 == 0) {
+      var answer = 0
 
-      answer = Random.nextInt(MaxAnswer - MinAnswer) + MinAnswer
+      while (answer % 2 == 0 || answer % 5 == 0) {
 
-    }
+        answer = Random.nextInt(MaxAnswer - MinAnswer) + MinAnswer
 
-    // Show the number and ask player if it is a prime
-    
-    println(s"Is $answer a prime number? (Y/N/X=Exit)")
-    reply = readLine().toUpperCase()
+      }
 
-    // Show the answer
-    val isPrime = primeList contains answer 
+      // Show the number and ask player if it is a prime
+      
+      println(s"Is $answer a prime number? (Y/N/X=Exit)")
+      reply = readLine().toUpperCase()
 
-    if (isPrime) {
-      print(if (reply == "Y") "Correcrt" else "Incorrect")
-      println(s" $answer is prime")
-    }
-    else {
-      print(if (reply == "Y") "Incorrecrt" else "Correct")
-      println(s" $answer is not prime")
-    }
-    
+      if ( reply == "X" ) {
+        println("Good Bye :D")
+        loop.break
+      }
 
-  } while ( reply != "X" )
+      // Show the answer
+      val isPrime = primeList contains answer 
 
-} 
+      if (isPrime) {
+        print(if (reply == "Y") "Correcrt" else "Incorrect")
+        println(s" $answer is prime")
+      }
+      else {
+        print(if (reply == "Y") "Incorrecrt" else "Correct")
+        println(s" $answer is not prime")
+      }
+      
+
+    } while ( reply != "X" )
+
+  }
+
+}
